@@ -38,9 +38,22 @@ public class Enemy1 : MonoBehaviour
     {
         Vector3 direction = (destination - position).normalized;
         
-        Vector3 scale = new Vector3(0.01f, 0.01f, 0.01f);
+        Vector3 scale = new Vector3(0.02f, 0.02f, 0.02f);
         direction.Scale(scale);
         position += direction;
         transform.position = position;
+
+        
     }
+
+    void OnCollisionEnter(Collision col)
+    {
+        if (col.gameObject.name == "Bullet" || col.gameObject.name == "Player")
+        {
+            Destroy(col.gameObject);
+            alive = false;
+        }
+    }
+
+
 }
