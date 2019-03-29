@@ -48,7 +48,7 @@ public class Enemy1 : MonoBehaviour
 
     void OnCollisionEnter(Collision col)
     {
-        if (col.gameObject.name == "Bullet" || col.gameObject.name == "Player")
+        if (col.gameObject.tag == "Bullet" || col.gameObject.name == "Player")
         {
             Destroy(col.gameObject);
             alive = false;

@@ -21,5 +21,6 @@ public class Bullet_Script : MonoBehaviour
     void Update()
     {
         position += movementVec * speed * Time.deltaTime;
+        transform.position = position;
     }
 }
