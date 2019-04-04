@@ -8,12 +8,14 @@ public class Enemy1 : MonoBehaviour
     private Vector3 position;
     private Vector3 destination;
     public bool alive;
+    private GameObject SceneManager;
     
     // Start is called before the first frame update
     void Start()
     {
         position = transform.position;
         alive = true;
+        SceneManager = GameObject.FindGameObjectWithTag("SM");
     }
 
     // Update is called once per frame
@@ -48,10 +50,17 @@ public class Enemy1 : MonoBehaviour
 
     void OnCollisionEnter(Collision col)
     {
-        if (col.gameObject.tag == "Bullet" || col.gameObject.name == "Player")
+        if (col.gameObject.tag == "Bullet")
         {
             Destroy(col.gameObject);
             alive = false;
+            SceneManager.GetComponent<ScoreScript>().AddScore(1);
+        }
+        else if(col.gameObject.name == "Player")
+        {
+            SceneManager.GetComponent<ScoreScript>().SaveScore();
+            alive = false;
+            //code for moving to final page that displays high score and your score.
         }
     }
 
