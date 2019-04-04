@@ -15,6 +15,7 @@ public class Bullet_Script : MonoBehaviour
         position = transform.position;
         movementVec = player.transform.forward;
         speed = 5f;
+        Destroy(gameObject, 3);
     }
 
     // Update is called once per frame

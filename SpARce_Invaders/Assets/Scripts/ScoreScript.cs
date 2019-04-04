@@ -44,7 +44,7 @@ public class ScoreScript : MonoBehaviour
         PlayerPrefs.SetInt("SessionScore", score);
     }
 
-    int GetHighScore()
+    public int GetHighScore()
     {
         return PlayerPrefs.GetInt("HiScore");
     }
