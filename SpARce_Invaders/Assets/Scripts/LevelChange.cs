@@ -7,8 +7,12 @@ public class LevelChange : MonoBehaviour
 {
     public string sceneName;
 
-    public void SceneChange()
+
+    private void OnCollisionEnter(Collision collision)
     {
-        SceneManager.LoadScene(sceneName);
+        if(collision.gameObject.tag == "Bullet")
+        {
+            SceneManager.LoadScene(sceneName);
+        }
     }
 }
