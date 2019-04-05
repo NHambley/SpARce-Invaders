@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Enemy1 : MonoBehaviour
 {
@@ -8,8 +9,8 @@ public class Enemy1 : MonoBehaviour
     private Vector3 position;
     private Vector3 destination;
     public bool alive;
+    private GameObject sceneManager;
 
-   
 
 
     // Start is called before the first frame update
@@ -20,7 +21,7 @@ public class Enemy1 : MonoBehaviour
         alive = true;
         transform.forward = (destination - position).normalized;
 
-        
+        sceneManager = GameObject.FindGameObjectWithTag("SM");
     }
 
     // Update is called once per frame
@@ -57,10 +58,18 @@ public class Enemy1 : MonoBehaviour
 
     void OnCollisionEnter(Collision col)
     {
-        if (col.gameObject.tag == "Bullet" || col.gameObject.name == "Player")
+        if (col.gameObject.tag == "Bullet")
         {
             Destroy(col.gameObject);
             alive = false;
+            sceneManager.GetComponent<ScoreScript>().AddScore(1);
+        }
+        else if (col.gameObject.name == "Player")
+        {
+            sceneManager.GetComponent<ScoreScript>().SaveScore();
+            alive = false;
+            //code for moving to final page that displays high score and your score.
+            SceneManager.LoadScene("GameOverScene");
         }
     }
 
