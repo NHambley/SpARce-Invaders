@@ -15,6 +15,11 @@ public class Barrier : MonoBehaviour
             {
                 Destroy(gameObject);
             }
+
+            if(collision.gameObject.tag == "Bullet")
+            {
+                collision.gameObject.GetComponent<Bullet_Script>().Remove();
+            }
         }
     }
 }

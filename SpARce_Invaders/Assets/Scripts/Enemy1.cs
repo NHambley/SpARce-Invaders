@@ -60,7 +60,7 @@ public class Enemy1 : MonoBehaviour
     {
         if (col.gameObject.tag == "Bullet")
         {
-            Destroy(col.gameObject);
+            col.gameObject.GetComponent<Bullet_Script>().Remove();
             alive = false;
             sceneManager.GetComponent<ScoreScript>().AddScore(1);
         }
