@@ -62,11 +62,11 @@ public class Enemy1 : MonoBehaviour
         {
             col.gameObject.GetComponent<Bullet_Script>().Remove();
             alive = false;
-            sceneManager.GetComponent<ScoreScript>().AddScore(1);
+            sceneManager.GetComponent<ScoreTimerScript>().AddScore(1);
         }
         else if (col.gameObject.name == "Player")
         {
-            sceneManager.GetComponent<ScoreScript>().SaveScore();
+            sceneManager.GetComponent<ScoreTimerScript>().SaveScore();
             alive = false;
             //code for moving to final page that displays high score and your score.
             SceneManager.LoadScene("GameOverScene");

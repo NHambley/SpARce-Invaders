@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ScoreDisplay : MonoBehaviour
 {
-    ScoreScript scoreS;
+    ScoreTimerScript scoreS;
     int score;
 
     int ones, tens, hundreds;
@@ -15,7 +15,7 @@ public class ScoreDisplay : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        scoreS = GetComponent<ScoreScript>();
+        scoreS = GetComponent<ScoreTimerScript>();
         score = scoreS.GetSessionScore();
         ones = 0;
         tens = 0;
