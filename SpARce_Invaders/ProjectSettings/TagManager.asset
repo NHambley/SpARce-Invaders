@@ -8,6 +8,7 @@ TagManager:
   - MenuSwitch
   - SM
   - HUD
+  - TIME
   layers:
   - Default
   - TransparentFX
