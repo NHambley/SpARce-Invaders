@@ -10,7 +10,7 @@ public class Enemy1 : MonoBehaviour
     private Vector3 destination;
     public bool alive;
     private GameObject sceneManager;
-
+    public bool leader;
 
 
     // Start is called before the first frame update
@@ -22,6 +22,8 @@ public class Enemy1 : MonoBehaviour
         transform.forward = (destination - position).normalized;
 
         sceneManager = GameObject.FindGameObjectWithTag("SM");
+
+        createMinions();
     }
 
     // Update is called once per frame
@@ -36,9 +38,12 @@ public class Enemy1 : MonoBehaviour
         }
         else
         {
-            Vector2 randomXZ = Random.insideUnitCircle * 10;
-            Vector3 newPosition = new Vector3(randomXZ.x, 5, randomXZ.y);
-            GameObject newEnemy = Instantiate(gameObject, newPosition, Quaternion.identity);
+            if (leader == true)
+            {
+                Vector2 randomXZ = Random.insideUnitCircle * 10;
+                Vector3 newPosition = new Vector3(randomXZ.x, 5, randomXZ.y);
+                GameObject newEnemy = Instantiate(gameObject, newPosition, Quaternion.identity);
+            }
             Destroy(gameObject);
         }
     }
@@ -54,7 +59,21 @@ public class Enemy1 : MonoBehaviour
         transform.position += right * Time.deltaTime;
     }
 
-   
+   void createMinions()
+    {
+        for (int i = -1; i < 2; i++)
+        {
+            for (int j = -1; j < 2; j++)
+            {
+                Vector3 newPosition = position;
+                newPosition += (transform.up * (5.0f * j));
+                newPosition += (transform.right * (5.0f * j));
+                
+                GameObject newEnemy = Instantiate(gameObject, newPosition, Quaternion.identity);
+                //newEnemy.leader = false;
+            }
+        }
+    }
 
     void OnCollisionEnter(Collision col)
     {
