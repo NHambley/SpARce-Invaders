@@ -22,8 +22,11 @@ public class Enemy1 : MonoBehaviour
         transform.forward = (destination - position).normalized;
 
         sceneManager = GameObject.FindGameObjectWithTag("SM");
-
-        createMinions();
+        if (leader)
+        {
+            transform.forward = (destination - position).normalized;
+            formMinions();
+        }
     }
 
     // Update is called once per frame
@@ -33,7 +36,7 @@ public class Enemy1 : MonoBehaviour
         {
             position = transform.position;
             destination = player.transform.position;
-
+            transform.forward = (destination - position).normalized;
             Move();
         }
         else
@@ -43,6 +46,7 @@ public class Enemy1 : MonoBehaviour
                 Vector2 randomXZ = Random.insideUnitCircle * 10;
                 Vector3 newPosition = new Vector3(randomXZ.x, 5, randomXZ.y);
                 GameObject newEnemy = Instantiate(gameObject, newPosition, Quaternion.identity);
+                newEnemy.GetComponent<Enemy1>().leader = true;
             }
             Destroy(gameObject);
         }
@@ -53,26 +57,31 @@ public class Enemy1 : MonoBehaviour
         Vector3 direction = (destination - position).normalized;
         transform.position += direction/3 * Time.deltaTime;
 
-        transform.forward = direction;
+        transform.forward = -direction;
         Vector3 right = transform.right;
         right.y = 0;
+        right.z = 0;
         transform.position += right * Time.deltaTime;
     }
 
-   void createMinions()
+   void formMinions()
     {
-        for (int i = -1; i < 2; i++)
-        {
-            for (int j = -1; j < 2; j++)
-            {
-                Vector3 newPosition = position;
-                newPosition += (transform.up * (5.0f * j));
-                newPosition += (transform.right * (5.0f * j));
-                
-                GameObject newEnemy = Instantiate(gameObject, newPosition, Quaternion.identity);
-                //newEnemy.leader = false;
-            }
-        }
+        createMinion(new Vector3( 1, -1, 0));
+        createMinion(new Vector3( 1,  0, 0));
+        createMinion(new Vector3( 1,  1, 0));
+        createMinion(new Vector3(-1, -1, 0));
+        createMinion(new Vector3(-1,  0, 0));
+        createMinion(new Vector3(-1,  1, 0));
+        createMinion(new Vector3( 0, -1, 0));
+        createMinion(new Vector3( 0,  1, 0));
+    }
+
+    void createMinion(Vector3 minionPosition)
+    {
+        Vector3 newPosition = position;
+        newPosition += (transform.right * minionPosition.x) + (transform.up * minionPosition.y);
+        GameObject newEnemy = Instantiate(gameObject, newPosition, Quaternion.identity);
+        newEnemy.GetComponent<Enemy1>().leader = false;
     }
 
     void OnCollisionEnter(Collision col)
