@@ -41,8 +41,12 @@ public class ScoreDisplay : MonoBehaviour
                 }
 
                 tens = j;
+                if (score == 0)
+                    return;
             }
             hundreds = i;
+            if (score == 0)
+                return;
         }
 
         // Instantiate the score
