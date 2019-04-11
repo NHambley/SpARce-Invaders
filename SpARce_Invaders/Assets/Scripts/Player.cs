@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public class Player : MonoBehaviour
     float shootTimer;
     bool canShoot = true;
     int tracker = 0;
+    private GameObject sceneManager;
     private void Start()
     {
         ammo = new GameObject[25];
@@ -19,6 +21,8 @@ public class Player : MonoBehaviour
             ammo[i] = transform.GetChild(i).gameObject;
         }
         shootTimer = shootCD;
+
+        sceneManager = GameObject.FindGameObjectWithTag("SM");
     }
     // Update is called once per frame
     void Update()
@@ -61,5 +65,17 @@ public class Player : MonoBehaviour
         {
             tracker = 0;
         }
+    }
+
+    void OnCollisionEnter(Collision col)
+    {
+        if (col.gameObject.tag == "Bullet" && col.gameObject.GetComponent<Bullet_Script>().hostile == true)
+        {
+            col.gameObject.GetComponent<Bullet_Script>().Remove();
+            sceneManager.GetComponent<ScoreScript>().SaveScore();
+            //code for moving to final page that displays high score and your score.
+            SceneManager.LoadScene("GameOverScene");
+        }
+        
     }
 }
