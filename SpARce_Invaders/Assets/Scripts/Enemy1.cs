@@ -5,17 +5,24 @@ using UnityEngine.SceneManagement;
 
 public class Enemy1 : MonoBehaviour
 {
-    public GameObject player;
+    private GameObject player;
+    private GameObject bullet;
+    public bool alive;
+    public bool leader;
     private Vector3 position;
     private Vector3 destination;
-    public bool alive;
+    private float shootTimer;
+    private float shootCD;
+
     private GameObject sceneManager;
-    public bool leader;
 
 
     // Start is called before the first frame update
     void Start()
     {
+        player = GameObject.FindGameObjectWithTag("Player");
+        bullet = transform.Find("Bullet").gameObject;
+        bullet.GetComponent<Bullet_Script>().hostile = true;
         position = transform.position;
         destination = player.transform.position;
         alive = true;
@@ -24,9 +31,10 @@ public class Enemy1 : MonoBehaviour
         sceneManager = GameObject.FindGameObjectWithTag("SM");
         if (leader)
         {
-            transform.forward = (destination - position).normalized;
             formMinions();
         }
+
+        shootTimer = 5 + (Random.value * 15);
     }
 
     // Update is called once per frame
@@ -38,12 +46,19 @@ public class Enemy1 : MonoBehaviour
             destination = player.transform.position;
             transform.forward = (destination - position).normalized;
             Move();
+
+            if (shootTimer <= 0)
+            {
+                Shoot();
+            }
+
+            shootTimer -= Time.deltaTime;
         }
         else
         {
             if (leader == true)
             {
-                Vector2 randomXZ = Random.insideUnitCircle * 10;
+                Vector2 randomXZ = Random.insideUnitCircle * 15;
                 Vector3 newPosition = new Vector3(randomXZ.x, 5, randomXZ.y);
                 GameObject newEnemy = Instantiate(gameObject, newPosition, Quaternion.identity);
                 newEnemy.GetComponent<Enemy1>().leader = true;
@@ -55,13 +70,28 @@ public class Enemy1 : MonoBehaviour
     void Move()
     {
         Vector3 direction = (destination - position).normalized;
-        transform.position += direction/3 * Time.deltaTime;
+        transform.forward = direction;
+        transform.position += (direction / 3) * Time.deltaTime;
 
-        transform.forward = -direction;
         Vector3 right = transform.right;
         right.y = 0;
-        right.z = 0;
         transform.position += right * Time.deltaTime;
+    }
+
+    void Shoot()
+    {
+        shootTimer = shootCD; ;
+
+        // check if the bullet is already active, if it is move it back to home position
+        if (bullet.activeInHierarchy == true)
+        {
+            bullet.GetComponent<Bullet_Script>().MoveHome();
+        }
+        else
+        {
+            bullet.SetActive(true);
+            bullet.GetComponent<Bullet_Script>().fired = true;
+        }
     }
 
    void formMinions()
@@ -86,7 +116,7 @@ public class Enemy1 : MonoBehaviour
 
     void OnCollisionEnter(Collision col)
     {
-        if (col.gameObject.tag == "Bullet")
+        if (col.gameObject.tag == "Bullet" && col.gameObject.GetComponent<Bullet_Script>().hostile == false)
         {
             col.gameObject.GetComponent<Bullet_Script>().Remove();
             alive = false;

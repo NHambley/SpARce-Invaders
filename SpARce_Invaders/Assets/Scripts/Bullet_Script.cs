@@ -11,6 +11,7 @@ public class Bullet_Script : MonoBehaviour
     Vector3 position;
     float speed;
 
+    public bool hostile = false;
     public bool fired = false;
     // Start is called before the first frame update
     void Start()
@@ -20,6 +21,7 @@ public class Bullet_Script : MonoBehaviour
         home = transform.position;
         position = transform.position;
         movementVec = player.transform.forward;
+        movementVec = transform.parent.forward;
         speed = 5f;
 
         Invoke("Remove", 3);// three seconds after firing, send this bullet back to the player and disable it
