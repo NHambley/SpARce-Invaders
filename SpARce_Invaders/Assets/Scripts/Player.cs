@@ -72,7 +72,7 @@ public class Player : MonoBehaviour
         if (col.gameObject.tag == "Bullet" && col.gameObject.GetComponent<Bullet_Script>().hostile == true)
         {
             col.gameObject.GetComponent<Bullet_Script>().Remove();
-            sceneManager.GetComponent<ScoreScript>().SaveScore();
+            sceneManager.GetComponent<ScoreTimerScript>().SaveScore();
             //code for moving to final page that displays high score and your score.
             SceneManager.LoadScene("GameOverScene");
         }
